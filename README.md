@@ -1,7 +1,20 @@
-# Frontend
-The web/interface can be found at: https://ray-hacker-company.github.io/dcem/
+# Overview
+The web/interface can be found at: https://peaceful-tor-77075.herokuapp.com/dcem/
+
+Here use 
+
+    https://peaceful-tor-77075.herokuapp.com/home/ 
+
+as home ip and,
+
+    https://peaceful-tor-77075.herokuapp.com/single-monitor/
+
+as single - monitoring ip
+
+use username: admin and password: admin as well
 
 Or you can run it by using node locally along with server, (instruction in server section down...)
+
 
 Then open the url shown in output, for example:
 
