@@ -39,8 +39,14 @@ app.get('/single-monitor/', (req, res) => {
     v = Math.round((5 + Math.random() * 20) * 10) / 10;
     res.send(
         {
-            voltage: v,
-            current: v/r,
+            'Location': "LLLLL",
+            'Device ID': 'DDDDDDDDDDDDDDDDD',
+            'Voltage': v,
+            'Current': v/r,
+            'Alarm': binarr(9),
+            'Gateway': 'GGGGGGGGGGGGGGGGG',
+            'Temperature': Math.round((20 + Math.random() * 20) * 100) / 100,
+            'Code': '00'
         }
     )
 });
