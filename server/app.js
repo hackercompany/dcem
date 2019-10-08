@@ -38,7 +38,7 @@ app.get("/home/", (req, res) => {
     Location: "LLLLL",
     "Device ID": makeid(4),
     Voltage: v,
-    Current: v / r,
+    Current: Math.round((v / r) * 10) / 10,
     Alarm: binarr(9),
     Gateway: "GGGGGGGGGGGGGGGGG",
     Temperature: Math.round((20 + Math.random() * 20) * 100) / 100,
