@@ -34,6 +34,9 @@ app.get("/home/", (req, res) => {
   v = Math.round((5 + Math.random() * 20) * 10) / 10;
 
   console.log("Got request");
+  /*return res.send(
+    '{"Location":"LLLLL","Device ID":"NXOU","Voltage": 02.9,"Current":3.1,"Alarm":"100000100","Gateway":"GGGGGGGGGGGGGGGGG","Temperature":21.12,"Code":"00"}'
+  );*/
   res.send({
     Location: "LLLLL",
     "Device ID": makeid(4),
