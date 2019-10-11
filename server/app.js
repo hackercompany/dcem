@@ -5,6 +5,11 @@ const app = express();
 
 app.use(cors());
 
+app.use(function(req, res, next) {
+  console.log("Time:", Date.now());
+  next();
+});
+
 app.use("/dcem", express.static(path.join(__dirname, "dcem")));
 
 function makeid(length) {
@@ -53,7 +58,7 @@ app.get("/single-monitor/", (req, res) => {
   v = Math.round((5 + Math.random() * 20) * 10) / 10;
   res.send({
     Location: "LLLLL",
-    "Device ID": "DDDDDDDDDDDDDDDDD",
+    "Device ID": makeid(4),
     Voltage: v,
     Current: v / r,
     Alarm: binarr(9),
