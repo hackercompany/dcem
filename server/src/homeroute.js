@@ -17,7 +17,7 @@ function getRandomIV(devid = '5678') {
 
 	return {
 		Location: '1234',
-		'Device ID': devid,
+		DeviceID: devid,
 		Voltage: v,
 		Current: Math.round((v / r) * 10) / 10,
 		Alarm: binarr(9),

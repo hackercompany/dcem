@@ -1,26 +1,12 @@
-const { Sequelize, Model, DataTypes } = require('sequelize');
+const Sequelize = require('sequelize');
+class Settings extends Sequelize.Model {}
+const SettingsSchema = {
+	name: Sequelize.DataTypes.STRING,
+	value: Sequelize.DataTypes.STRING,
+};
 
-const sequelize = new Sequelize('sqlite::memory:');
-
-class Settings extends Model {}
-
-Settings.init(
-	{
-		name: DataTypes.STRING,
-		value: DataTypes.STRING,
-	},
-	{ sequelize, modelName: 'settings' }
-);
-
-sequelize.sync();
-/*.then(() => {
-		Settings.create({
-			name: 'Version',
-			value: '1.0.0',
-		});
-	})
-	.then(set => {
-		console.log(set);
-	});*/
+const sequelize = require('../db');
+Settings.init(SettingsSchema, { sequelize, modelName: 'settings' });
+Settings.sync();
 
 module.exports = Settings;

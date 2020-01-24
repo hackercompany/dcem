@@ -5,13 +5,16 @@ const app = express();
 
 const homeRoute = require('./src/homeroute');
 const smRoute = require('./src/single-monitor');
-const seq = require('./src/db');
+const db = require('./src/db');
+const updater = require('./src/readings/updater');
 
 const apiRoute = require('./src/routes');
 
 /**DB Connection test */
-seq.authenticate()
+db.authenticate()
 	.then(() => {
+		// db.initModels(db.seq);
+		updater();
 		console.log('Database Connected Successfully');
 		app.use(cors());
 		app.use(express.json());
@@ -34,6 +37,6 @@ seq.authenticate()
 			console.log(`Single Monitor URL\t: http://localhost:${port}/single-monitor/`);
 		});
 	})
-	.catch(() => {
-		console.error('Database cannot be connected...');
+	.catch(e => {
+		console.error('Database cannot be connected...', e);
 	});

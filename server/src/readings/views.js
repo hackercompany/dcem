@@ -1,14 +1,11 @@
 const express = require('express');
-// const { Sequelize } = require('sequelize');
-// const sequelize = new Sequelize('sqlite::memory:');
-
-const Settings = require('./models');
+const Model = require('./models');
 
 const route = express.Router();
 
 route.get('/', (req, res) => {
 	try {
-		Settings.findAll().then(data => {
+		Model.findAll().then(data => {
 			// console.log(data);
 			res.send(data);
 		});
@@ -21,9 +18,15 @@ route.get('/', (req, res) => {
 route.post('/', (req, res) => {
 	try {
 		// console.log(req.body);
-		Settings.create({
-			name: req.body.name,
-			value: req.body.value,
+		Model.create({
+			Location: req.body.Location,
+			DeviceID: req.body.DeviceID,
+			Voltage: req.body.Voltage,
+			Current: req.body.Current,
+			Alarm: req.body.Alarm,
+			Gateway: req.body.Gateway,
+			Temperature: req.body.Temperature,
+			Code: req.body.Code,
 		}).then(val => {
 			res.send(val);
 		});
@@ -36,7 +39,7 @@ route.get('/:id', (req, res) => {
 	try {
 		console.log(req.params.id);
 
-		Settings.findAll({
+		Model.findAll({
 			where: {
 				id: req.params.id,
 			},
@@ -44,23 +47,6 @@ route.get('/:id', (req, res) => {
 			res.send(data);
 		});
 	} catch (error) {
-		res.status(500).send({ error: true, message: 'Some Error occured', error: error });
-	}
-});
-
-route.post('/set/', (req, res) => {
-	try {
-		Settings.findOne({
-			where: {
-				name: 'endpoint',
-			},
-		}).then(data => {
-			if (data) {
-				data.update({ value: req.body.value }).then(r => res.send(r));
-			} else Settings.create({ value: req.body.value, name: 'endpoint' }).then(r => res.send(r));
-		});
-	} catch (error) {
-		// console.log(error);
 		res.status(500).send({ error: true, message: 'Some Error occured', error: error });
 	}
 });
