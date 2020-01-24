@@ -3,6 +3,8 @@ const http = require('http');
 const Settings = require('../settings/models');
 const Readings = require('./models');
 
+let latestReadings = { value: '{"DCEM":[]}' };
+
 async function wait(ms) {
 	return new Promise((resolve, reject) => {
 		setTimeout(() => {
@@ -32,8 +34,12 @@ async function updater() {
 					response.on('end', () => {
 						// console.log(JSON.parse(response_body));
 						try {
+							response_body.replace(
+								RegExp('(?::\\s*0*)([0-9])([0-9]*)(.[0-9])([0-9]*)', 'g'),
+								':$1$2$3$4'
+							);
 							const parsed_response = JSON.parse(response_body);
-
+							latestReadings.value = response_body;
 							Readings.bulkCreate(
 								parsed_response.DCEM,
 								res => {
@@ -56,4 +62,4 @@ async function updater() {
 	}
 }
 
-module.exports = updater;
+module.exports = { updater, latestReadings };

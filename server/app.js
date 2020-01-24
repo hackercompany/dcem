@@ -6,7 +6,7 @@ const app = express();
 const homeRoute = require('./src/homeroute');
 const smRoute = require('./src/single-monitor');
 const db = require('./src/db');
-const updater = require('./src/readings/updater');
+const { updater, latestReadings } = require('./src/readings/updater');
 
 const apiRoute = require('./src/routes');
 
@@ -21,15 +21,15 @@ db.authenticate()
 		app.use(express.urlencoded({ extended: true }));
 		app.use('/api', apiRoute);
 		app.use('/dcem', express.static(path.join(__dirname, 'dcem')));
-		app.get('/', (req, res) => {
-			res.send('Working');
+		app.get('/latest-readings', (req, res) => {
+			res.send(JSON.parse(latestReadings.value));
 		});
 		app.use('/home', homeRoute);
 		app.use('/single-monitor', smRoute);
 		app.use(function(req, res) {
 			return res.status(404).redirect('/dcem/');
 		});
-		port = process.env.PORT || 8000;
+		port = 8000;
 		app.listen(port, () => {
 			console.log(`base URL\t\t: http://localhost:${port}/`);
 			console.log(`Front-end URL\t\t: http://localhost:${port}/dcem/`);

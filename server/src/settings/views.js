@@ -31,6 +31,38 @@ route.post('/', (req, res) => {
 		res.status(500).send({ error: true, message: 'Some Error occured', error: error });
 	}
 });
+route.get('/name/:name', (req, res) => {
+	try {
+		Settings.findAll({
+			where: {
+				name: req.params.name,
+			},
+		})
+			.then(r => res.send(r))
+			.catch(e => {
+				res.status(500).send({ error: true, message: 'Some Error occured', error: error });
+			});
+	} catch (error) {}
+});
+
+route.post('/name/:name', (req, res) => {
+	try {
+		Settings.findOne({
+			where: {
+				name: req.params.name,
+			},
+		}).then(data => {
+			if (data) {
+				data.update({ value: req.body.value }).then(r => res.send(r));
+			} else Settings.create({ value: req.body.value, name: req.params.name }).then(r => res.send(r));
+		});
+	} catch (error) {
+		// console.log(error);
+		console.log(error);
+
+		res.status(500).send({ error: true, message: 'Some Error occured', error: error });
+	}
+});
 
 route.get('/:id', (req, res) => {
 	try {
@@ -44,23 +76,6 @@ route.get('/:id', (req, res) => {
 			res.send(data);
 		});
 	} catch (error) {
-		res.status(500).send({ error: true, message: 'Some Error occured', error: error });
-	}
-});
-
-route.post('/set/', (req, res) => {
-	try {
-		Settings.findOne({
-			where: {
-				name: 'endpoint',
-			},
-		}).then(data => {
-			if (data) {
-				data.update({ value: req.body.value }).then(r => res.send(r));
-			} else Settings.create({ value: req.body.value, name: 'endpoint' }).then(r => res.send(r));
-		});
-	} catch (error) {
-		// console.log(error);
 		res.status(500).send({ error: true, message: 'Some Error occured', error: error });
 	}
 });
