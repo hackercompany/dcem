@@ -40,7 +40,7 @@ async function updater() {
 							);
 							const parsed_response = JSON.parse(response_body);
 							latestReadings.value = response_body;
-							Readings.bulkCreate(
+							/*Readings.bulkCreate(
 								parsed_response.DCEM,
 								res => {
 									console.log(res);
@@ -48,7 +48,7 @@ async function updater() {
 								error => {
 									console.log('Some error occured', error);
 								}
-							);
+							);*/
 						} catch (error) {
 							console.log('Error in parsing data', response_body);
 						}

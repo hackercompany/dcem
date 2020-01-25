@@ -1,13 +1,13 @@
 const Sequalize = require('sequelize');
 
 // This one works as well...
-
+/*
 const sequalize = new Sequalize('devicestatus', 'root', '', {
 	dialect: 'mariadb',
 	host: 'localhost',
 });
 
-/*
+/** */
 
 const sequalize = new Sequalize({
 	dialect: 'sqlite',
@@ -19,5 +19,5 @@ const sequalize = new Sequalize({
 		idle: 10000,
 	},
 });
-*/
+/**/
 module.exports = sequalize;
