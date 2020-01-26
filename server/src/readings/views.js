@@ -1,12 +1,12 @@
 const express = require('express');
-const Model = require('./models');
+const Readings = require('./models');
 const CSV = require('csv-string');
 const route = express.Router();
 const btPc = require('./batterypercentage');
-
+const { latestReadings } = require('./updater');
 route.get('/', (req, res) => {
 	try {
-		Model.findAll().then(data => {
+		Readings.findAll().then(data => {
 			// console.log(data);
 			res.send(data);
 		});
@@ -18,7 +18,7 @@ route.get('/', (req, res) => {
 
 route.get('/csv', (req, res) => {
 	try {
-		Model.findAll().then(data => {
+		Readings.findAll().then(data => {
 			str = '';
 			if (data.len == 0) return res.send(str);
 			cols = [
@@ -62,7 +62,7 @@ route.get('/csv', (req, res) => {
 route.post('/', (req, res) => {
 	try {
 		// console.log(req.body);
-		Model.create({
+		Readings.create({
 			Location: req.body.Location,
 			DeviceID: req.body.DeviceID,
 			Voltage: req.body.Voltage,
@@ -79,11 +79,57 @@ route.post('/', (req, res) => {
 	}
 });
 
+route.post('/new-readings/', (req, res) => {
+	let response_body = {};
+	try {
+		console.log(req.body);
+
+		response_body = req.body.json;
+
+		response_body.replace(RegExp('(?::\\s*0*)([0-9])([0-9]*)(.[0-9])([0-9]*)', 'g'), ':$1$2$3$4'); // This prevents leading zeroes 😎
+
+		const parsed_response = JSON.parse(response_body);
+		latestReadings.value = response_body;
+		Readings.bulkCreate(
+			parsed_response.DCEM,
+			result => {
+				// console.log(res);
+				res.send({
+					error: false,
+					message: 'Records Added to database',
+					result: result,
+				});
+			},
+			error => {
+				console.log(error);
+
+				throw error;
+			}
+		).then(result => {
+			res.send({
+				error: false,
+				message: 'Records Added to database',
+				result: result,
+				latest_readings: latestReadings,
+			});
+		});
+	} catch (error) {
+		res.status(500).send({
+			error: true,
+			message: 'Some error occured during executing your result',
+			response_body: response_body,
+			error_object: error,
+			request_body: req.body,
+		});
+		console.log('Error in parsing data', response_body);
+	}
+});
+
 route.get('/:id', (req, res) => {
 	try {
 		console.log(req.params.id);
 
-		Model.findAll({
+		Readings.findAll({
 			where: {
 				id: req.params.id,
 			},

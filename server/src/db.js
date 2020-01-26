@@ -18,6 +18,11 @@ const sequalize = new Sequalize({
 		aquire: 30000,
 		idle: 10000,
 	},
+	logging: data => {
+		console.log('------------------------------------New DB Call--------------------------------');
+		console.log(data.slice(0, 60));
+		console.log('-------------------------------------------------------------------------------');
+	},
 });
 /**/
 module.exports = sequalize;

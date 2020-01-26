@@ -14,7 +14,7 @@ const apiRoute = require('./src/routes');
 db.authenticate()
 	.then(() => {
 		// db.initModels(db.seq);
-		// updater();
+		updater();
 		console.log('Database Connected Successfully');
 		app.use(cors());
 		app.use(express.json());
