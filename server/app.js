@@ -7,6 +7,7 @@ const homeRoute = require('./src/homeroute');
 const smRoute = require('./src/single-monitor');
 const db = require('./src/db');
 const { updater, latestReadings } = require('./src/readings/updater');
+const Readings = require('./src/readings/models');
 
 const apiRoute = require('./src/routes');
 
@@ -19,6 +20,42 @@ db.authenticate()
 		app.use(cors());
 		app.use(express.json());
 		app.use(express.urlencoded({ extended: true }));
+		app.post('', (req, res) => {
+			let response_body = {};
+			try {
+				console.log(req.body);
+
+				response_body = req.body.json;
+
+				response_body = response_body.replace(
+					RegExp('(?::\\s*0*)([0-9])([0-9]*)(.[0-9])([0-9]*)', 'g'),
+					':$1$2$3$4'
+				); // This prevents leading zeroes 😎
+
+				const parsed_response = JSON.parse(response_body);
+				latestReadings.value = response_body;
+				Readings.bulkCreate(
+					parsed_response.DCEM,
+					result => {
+						res.send({
+							error: false,
+						});
+					},
+					error => {
+						throw error;
+					}
+				).then(result => {
+					res.send({
+						error: false,
+					});
+				});
+			} catch (error) {
+				res.status(500).send({
+					error: true,
+				});
+				console.log(error);
+			}
+		});
 		app.use('/api', apiRoute);
 		app.use('/dcem', express.static(path.join(__dirname, 'dcem')));
 		app.get('/latest-readings', (req, res) => {
