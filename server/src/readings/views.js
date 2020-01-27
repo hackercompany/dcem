@@ -96,30 +96,28 @@ route.post('/new-readings/', (req, res) => {
 				// console.log(res);
 				res.send({
 					error: false,
-					message: 'Records Added to database',
-					result: result,
+					// message: 'Records Added to database',
+					// result: result,
 				});
 			},
 			error => {
-				console.log(error);
-
 				throw error;
 			}
 		).then(result => {
 			res.send({
 				error: false,
-				message: 'Records Added to database',
-				result: result,
-				latest_readings: latestReadings,
+				// message: 'Records Added to database',
+				// result: result,
+				// latest_readings: latestReadings,
 			});
 		});
 	} catch (error) {
 		res.status(500).send({
 			error: true,
-			message: 'Some error occured during executing your result',
-			response_body: response_body,
-			error_object: error,
-			request_body: req.body,
+			//message: 'Some error occured during executing your result',
+			//response_body: response_body,
+			//error_object: error,
+			//request_body: req.body,
 		});
 		console.log('Error in parsing data', response_body);
 	}
