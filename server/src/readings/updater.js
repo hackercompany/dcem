@@ -40,7 +40,6 @@ async function updater() {
 							);
 							const parsed_response = JSON.parse(response_body);
 							latestReadings.value = response_body;
-
 							Readings.bulkCreate(
 								parsed_response.DCEM,
 								res => {

@@ -86,7 +86,7 @@ route.post('/new-readings/', (req, res) => {
 
 		response_body = req.body.json;
 
-		response_body.replace(RegExp('(?::\\s*0*)([0-9])([0-9]*)(.[0-9])([0-9]*)', 'g'), ':$1$2$3$4'); // This prevents leading zeroes 😎
+		response_body = response_body.replace(RegExp('(?::\\s*0*)([0-9])([0-9]*)(.[0-9])([0-9]*)', 'g'), ':$1$2$3$4'); // This prevents leading zeroes 😎
 
 		const parsed_response = JSON.parse(response_body);
 		latestReadings.value = response_body;
